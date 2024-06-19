@@ -6,6 +6,7 @@ import LoadingScreen from "./LoadingScreen";
 function News() {
   const [news, setNews] = useState([]);
   const [fetching, setFetching] = useState(false);
+
   useEffect(() => {
     (async () => {
       try {
@@ -13,14 +14,14 @@ function News() {
         const response = await axios.get(
           "https://newsapi.org/v2/top-headlines?country=us&category=business&apiKey=2381c3c9c7dc4daea5110196517dbab5"
         );
-        console.log(response.data);
-        setNews(response.data.articles);
+        setNews(response?.data?.articles);
         setFetching(false);
       } catch (error) {
         console.log(error.message);
       }
     })();
   }, []);
+
   return (
     <>
       <div className="tw-mt-2 ">
@@ -31,14 +32,16 @@ function News() {
       {fetching && <LoadingScreen />}
       <div className="">
         <div className=" container container tw-flex tw-justify-between tw-md:justify-center tw-flex-wrap tw-md:w-10 tw-md:max-xl:flex  ">
-          {news.map((eve) => (
-            <Cards
-              title={eve.title}
-              description={eve?.description?.slice(0, 92)}
-              image={eve?.urlToImage}
-              url={eve.url}
-            />
-          ))}
+          {news &&
+            news.map((eve, ev) => (
+              <Cards
+                key={ev}
+                title={eve.title}
+                description={eve?.description?.slice(0, 92)}
+                image={eve?.urlToImage}
+                url={eve.url}
+              />
+            ))}
           ;
         </div>
       </div>

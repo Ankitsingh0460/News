@@ -1,72 +1,85 @@
-import React from "react";
+import React, { useEffect } from "react";
+import { useDispatch } from "react-redux";
+import { setNews } from "./slices/newsSlice";
+import axios from "axios";
+import { Link, useNavigate } from "react-router-dom";
 
 function Navbar() {
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+  const handleClickButton = async (item) => {
+    try {
+      const response = await axios.get(
+        `https://newsapi.org/v2/top-headlines?country=us&category=${item}&apiKey=2381c3c9c7dc4daea5110196517dbab5`
+      );
+      console.log(response.data);
+      dispatch(setNews(response.data.articles));
+      navigate(`/detail/:${item}`);
+    } catch (error) {
+      console.log(error.message);
+    }
+  };
+
   return (
     <>
       <nav className="navbar navbar-expand-lg tw-bg-slate-400  ">
         <div className="container-fluid tw-ml-10 tw-mr-10 text-white">
-          <a className="navbar-brand" href="#">
+          <Link to="/" className="navbar-brand" href="#">
             News
-          </a>
+          </Link>
           <button
             className="navbar-toggler"
             type="button"
             data-bs-toggle="collapse"
             data-bs-target="#navbarSupportedContent"
             aria-controls="navbarSupportedContent"
-            aria-exp
             anded="false"
             aria-label="Toggle navigation"
           >
             <span className="navbar-toggler-icon"></span>
           </button>
           <div className="collapse navbar-collapse" id="navbarSupportedContent">
-            <ul className="navbar-nav me-auto mb-2 mb-lg-0">
+            <ul className="navbar-nav me-auto mb-2 mb-lg-0 tw-cursor-pointer">
               <li className="nav-item">
-                <a className="nav-link active" aria-current="page" href="#">
-                  Home
-                </a>
-              </li>
-              <li className="nav-item">
-                <a className="nav-link" href="#">
-                  Link
-                </a>
-              </li>
-              <li className="nav-item dropdown">
-                <a
-                  className="nav-link dropdown-toggle"
-                  href="#"
-                  role="button"
-                  data-bs-toggle="dropdown"
-                  aria-expanded="false"
+                <Link
+                  to="/detail/sports"
+                  className="nav-link"
+                  onClick={() => handleClickButton("sports")}
                 >
-                  Dropdown
-                </a>
-                <ul className="dropdown-menu">
-                  <li>
-                    <a className="dropdown-item" href="#">
-                      Action
-                    </a>
-                  </li>
-                  <li>
-                    <a className="dropdown-item" href="#">
-                      Another action
-                    </a>
-                  </li>
-                  <li>
-                    <hr className="dropdown-divider" />
-                  </li>
-                  <li>
-                    <a className="dropdown-item" href="#">
-                      Something else here
-                    </a>
-                  </li>
-                </ul>
+                  Sports
+                </Link>
               </li>
               <li className="nav-item">
-                <a className="nav-link disabled" aria-disabled="true">
-                  Disabled
-                </a>
+                <Link
+                  className="nav-link"
+                  onClick={() => handleClickButton("business")}
+                >
+                  Business
+                </Link>
+              </li>
+              <li className="nav-item">
+                <Link
+                  className="nav-link"
+                  onClick={() => handleClickButton("entertainment")}
+                >
+                  Entertainment
+                </Link>
+              </li>
+              <li className="nav-item">
+                <Link
+                  className="nav-link"
+                  onClick={() => handleClickButton("science")}
+                >
+                  Science
+                </Link>
+              </li>
+              <li className="nav-item">
+                <Link
+                  className="nav-link"
+                  onClick={() => handleClickButton("technology")}
+                >
+                  Technology
+                </Link>
               </li>
             </ul>
             <form className="d-flex" role="search">
