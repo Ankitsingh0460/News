@@ -3,7 +3,7 @@ import React from "react";
 function Navbar() {
   return (
     <>
-      <nav className="navbar navbar-expand-lg tw-bg-slate-300  ">
+      <nav className="navbar navbar-expand-lg tw-bg-slate-400  ">
         <div className="container-fluid tw-ml-10 tw-mr-10 text-white">
           <a className="navbar-brand" href="#">
             News

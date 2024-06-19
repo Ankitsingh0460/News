@@ -1,17 +1,21 @@
 import React, { useEffect, useState } from "react";
 import Cards from "./Cards";
 import axios from "axios";
+import LoadingScreen from "./LoadingScreen";
 
 function News() {
   const [news, setNews] = useState([]);
+  const [fetching, setFetching] = useState(false);
   useEffect(() => {
     (async () => {
       try {
+        setFetching(true);
         const response = await axios.get(
-          "https://newsapi.org/v2/top-headlines?sources=techcrunch&apiKey=2381c3c9c7dc4daea5110196517dbab5"
+          "https://newsapi.org/v2/top-headlines?country=us&category=business&apiKey=2381c3c9c7dc4daea5110196517dbab5"
         );
         console.log(response.data);
         setNews(response.data.articles);
+        setFetching(false);
       } catch (error) {
         console.log(error.message);
       }
@@ -19,19 +23,19 @@ function News() {
   }, []);
   return (
     <>
-      <div className="tw-bg-slate-200 ">
+      <div className="tw-mt-2 ">
         <h2 className="tw-text-center tw-font-bold  tw-text-3xl tw-sm:text-center ">
           Top Headingh
         </h2>
       </div>
-
-      <div className=" tw-bg-slate-200">
+      {fetching && <LoadingScreen />}
+      <div className="">
         <div className=" container container tw-flex tw-justify-between tw-md:justify-center tw-flex-wrap tw-md:w-10 tw-md:max-xl:flex  ">
           {news.map((eve) => (
             <Cards
               title={eve.title}
-              description={eve.description.slice(0, 92)}
-              image={eve.urlToImage}
+              description={eve?.description?.slice(0, 92)}
+              image={eve?.urlToImage}
               url={eve.url}
             />
           ))}
@@ -41,5 +45,4 @@ function News() {
     </>
   );
 }
-
 export default News;
